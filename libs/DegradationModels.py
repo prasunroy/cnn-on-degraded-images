@@ -16,7 +16,14 @@ import random
 
 # apply a degradation model on an image
 def imdegrade(image, model, mu=0, sigma=0, density=0, gb_ksize=(1, 1),
-              mb_kernel=numpy.zeros((1, 1), dtype='uint8'), quality=100):
+              mb_kernel=numpy.zeros((1, 1), dtype='uint8'), quality=100,
+              seed=None):
+    
+    # setup seeds for random number generators
+    # (only required for reproducibility)
+    numpy.random.seed(seed)
+    random.seed(seed)
+    
     # create a copy of the input image to prevent direct modification
     # on the original input image
     image = image.copy()
@@ -32,14 +39,14 @@ def imdegrade(image, model, mu=0, sigma=0, density=0, gb_ksize=(1, 1),
     # apply a degradation model
     model = model.lower()
     
-    if model == 'gaussian_white':
+    if model == 'gaussian_white' and sigma > 0:
         noise = numpy.random.normal(mu, sigma, (h, w))
         noise = numpy.dstack([noise]*c)
         image = image + noise
         image = cv2.normalize(image, None, 0, 255,
                               cv2.NORM_MINMAX, cv2.CV_8UC1)
     
-    elif model == 'gaussian_color':
+    elif model == 'gaussian_color' and sigma > 0:
         noise = numpy.random.normal(mu, sigma, (h, w, c))
         image = image + noise
         image = cv2.normalize(image, None, 0, 255,
