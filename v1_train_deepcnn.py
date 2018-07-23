@@ -16,7 +16,6 @@ import cv2
 import glob
 import numpy
 import os
-import platform
 import tensorflow
 
 from keras import applications
@@ -33,6 +32,7 @@ from keras.utils import to_categorical
 from matplotlib import pyplot
 from scipy.io import loadmat
 
+from libs.PipelineUtils import shutdown
 from mlutils.callbacks import Telegram
 
 
@@ -85,16 +85,19 @@ cpt_last = os.path.join(cpt_dir, '{}_last.h5'.format(ARCHITECTURE))
 
 # validate paths
 def validate_paths():
-    output_dirs = [OUTPUT_DIR, log_dir, cpt_dir, tbd_dir]
-    for directory in output_dirs:
+    flag = True
+    for file in [DATA_TRAIN, DATA_VALID]:
+        if not os.path.isfile(file):
+            print('[INFO] Data not found at {}'.format(file))
+            flag = False
+    for directory in [OUTPUT_DIR, log_dir, cpt_dir, tbd_dir]:
         if not os.path.isdir(directory):
             os.makedirs(directory)
         elif len(glob.glob(os.path.join(directory, '*.*'))) > 0:
-            print('[INFO] Output directories must be empty')
-            
-            return False
+            print('[INFO] Output directory {} must be empty'.format(directory))
+            flag = False
     
-    return True
+    return flag
 
 
 # load data
@@ -211,21 +214,6 @@ def plot(train_history):
     pyplot.legend()
     pyplot.savefig(os.path.join(log_dir, 'plot_accuracy.png'))
     pyplot.show()
-    
-    return
-
-
-# shutdown system
-def shutdown():
-    print('[INFO] Initiating system shutdown... ', end='')
-    if platform.system() == 'Windows':
-        flag = os.system('shutdown -s -t 0')
-    else:
-        flag = os.system('shutdown -h now')
-    if flag == 0:
-        print('succeeded')
-    else:
-        print('failed')
     
     return
 

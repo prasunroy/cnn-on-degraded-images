@@ -15,7 +15,6 @@ from __future__ import print_function
 import glob
 import numpy
 import os
-import platform
 import tensorflow
 
 from keras import applications
@@ -31,6 +30,7 @@ from keras.models import Model
 from keras.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot
 
+from libs.PipelineUtils import shutdown
 from mlutils.callbacks import Telegram
 
 
@@ -92,18 +92,22 @@ cpt_last = os.path.join(cpt_dir, '{}_last.h5'.format(ARCHITECTURE))
 
 # validate paths
 def validate_paths():
-    output_dirs = [OUTPUT_DIR, \
-                   aug_dir_train, aug_dir_valid, log_dir, cpt_dir, tbd_dir]
+    flag = True
+    data_dirs = [DATA_TRAIN, DATA_VALID]
+    for directory in data_dirs:
+        if not os.path.isdir(directory):
+            print('[INFO] Data directory not found at {}'.format(directory))
+            flag = False
+    output_dirs = [OUTPUT_DIR, aug_dir_train, aug_dir_valid, log_dir, cpt_dir, tbd_dir]
     output_dirs = [directory for directory in output_dirs if directory is not None]
     for directory in output_dirs:
         if not os.path.isdir(directory):
             os.makedirs(directory)
         elif len(glob.glob(os.path.join(directory, '*.*'))) > 0:
-            print('[INFO] Output directories must be empty')
-            
-            return False
+            print('[INFO] Output directory {} must be empty'.format(directory))
+            flag = False
     
-    return True
+    return flag
 
 
 # load data
@@ -269,21 +273,6 @@ def plot(train_history):
     pyplot.legend()
     pyplot.savefig(os.path.join(log_dir, 'plot_accuracy.png'))
     pyplot.show()
-    
-    return
-
-
-# shutdown system
-def shutdown():
-    print('[INFO] Initiating system shutdown... ', end='')
-    if platform.system() == 'Windows':
-        flag = os.system('shutdown -s -t 0')
-    else:
-        flag = os.system('shutdown -h now')
-    if flag == 0:
-        print('succeeded')
-    else:
-        print('failed')
     
     return
 

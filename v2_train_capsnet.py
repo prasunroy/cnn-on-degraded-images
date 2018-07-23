@@ -18,7 +18,6 @@ from __future__ import print_function
 import glob
 import numpy
 import os
-import platform
 import tensorflow
 
 from keras import backend
@@ -37,6 +36,7 @@ from libs.CapsuleNetwork import CapsuleLayer
 from libs.CapsuleNetwork import Length
 from libs.CapsuleNetwork import Mask
 from libs.CapsuleNetwork import PrimaryCaps
+from libs.PipelineUtils import shutdown
 from mlutils.callbacks import Telegram
 
 
@@ -101,17 +101,22 @@ cpt_last = os.path.join(cpt_dir, '{}_last.h5'.format(ARCHITECTURE))
 
 # validate paths
 def validate_paths():
+    flag = True
+    data_dirs = [DATA_TRAIN, DATA_VALID]
+    for directory in data_dirs:
+        if not os.path.isdir(directory):
+            print('[INFO] Data directory not found at {}'.format(directory))
+            flag = False
     output_dirs = [OUTPUT_DIR, aug_dir_train, aug_dir_valid, log_dir, cpt_dir, tbd_dir]
     output_dirs = [directory for directory in output_dirs if directory is not None]
     for directory in output_dirs:
         if not os.path.isdir(directory):
             os.makedirs(directory)
         elif len(glob.glob(os.path.join(directory, '*.*'))) > 0:
-            print('[INFO] Output directories must be empty')
-            
-            return False
+            print('[INFO] Output directory {} must be empty'.format(directory))
+            flag = False
     
-    return True
+    return flag
 
 
 # load data
@@ -277,8 +282,8 @@ def callbacks():
     cb_log = CSVLogger(filename=log_file, append=True)
     cb_stp = EarlyStopping(monitor='val_{}_loss'.format(ARCHITECTURE), min_delta=0, patience=10, verbose=1)
     cb_lrs = LearningRateScheduler(schedule=lambda epoch: LEARN_RATE * (DECAY_RATE**epoch), verbose=0)
-    cb_cpt_best = ModelCheckpoint(filepath=cpt_best, monitor='val_{}_acc'.format(ARCHITECTURE), save_best_only=True, save_weights_only=True, verbose=1)
-    cb_cpt_last = ModelCheckpoint(filepath=cpt_last, monitor='val_{}_acc'.format(ARCHITECTURE), save_best_only=False, save_weights_only=True, verbose=0)
+    cb_cpt_best = ModelCheckpoint(filepath=cpt_best, monitor='val_{}_acc'.format(ARCHITECTURE), save_best_only=True, verbose=1)
+    cb_cpt_last = ModelCheckpoint(filepath=cpt_last, monitor='val_{}_acc'.format(ARCHITECTURE), save_best_only=False, verbose=0)
     cb_tbd = TensorBoard(log_dir=tbd_dir, batch_size=BATCH_SIZE, write_grads=True, write_images=True)
     cb_tel = Telegram(auth_token=AUTH_TOKEN, chat_id=TELCHAT_ID, monitor='val_{}_acc'.format(ARCHITECTURE), out_dir=OUTPUT_DIR)
     
@@ -322,21 +327,6 @@ def plot(train_history):
     return
 
 
-# shutdown system
-def shutdown():
-    print('[INFO] Initiating system shutdown... ', end='')
-    if platform.system() == 'Windows':
-        flag = os.system('shutdown -s -t 0')
-    else:
-        flag = os.system('shutdown -h now')
-    if flag == 0:
-        print('succeeded')
-    else:
-        print('failed')
-    
-    return
-
-
 # train model
 def train():
     # validate paths
@@ -352,14 +342,6 @@ def train():
     print('done')
     model_train.summary()
     model_evaln.summary()
-    
-    # serialize models to JSON
-    model_train_json = model_train.to_json()
-    model_evaln_json = model_evaln.to_json()
-    with open(os.path.join(OUTPUT_DIR, 'model_train.json'), 'w') as file:
-        file.write(model_train_json)
-    with open(os.path.join(OUTPUT_DIR, 'model_evaln.json'), 'w') as file:
-        file.write(model_evaln_json)
     
     # create callbacks
     cb_list = callbacks()
