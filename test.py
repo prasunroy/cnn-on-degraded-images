@@ -21,7 +21,7 @@ import pandas
 import sys
 
 from keras.applications import mobilenet
-from keras.models import load_model
+from keras.models import model_from_json
 from matplotlib import pyplot
 
 from libs.CapsuleNetwork import CapsuleLayer
@@ -52,8 +52,12 @@ NOISE_LIST = ['Gaussian_White', 'Gaussian_Color', 'Salt_and_Pepper',
               'Motion_Blur', 'Gaussian_Blur', 'JPEG_Quality']
 MODEL_LIST = ['capsnet', 'inceptionv3', 'mobilenet', 'resnet50',
               'vgg16', 'vgg19']
-MODEL_DICT = {name.lower(): 'output/{}/{}/checkpoints/{}_best.h5'\
-              .format(DATASET_ID, name, name) for name in MODEL_LIST}
+
+MODELS_DICT = {name.lower(): 'output/{}/{}/models/{}.json'\
+               .format(DATASET_ID, name, name) for name in MODEL_LIST}
+WEIGHT_DICT = {name.lower(): 'output/{}/{}/checkpoints/{}_best.h5'\
+               .format(DATASET_ID, name, name) for name in MODEL_LIST}
+
 TOP_N_PRED = 3
 
 OUTPUT_DIR_NOISY = 'output/{}/__test__images__'.format(DATASET_ID)
@@ -119,9 +123,13 @@ def validate_paths():
     if not os.path.isdir(IMAGE_DSRC):
         print('[INFO] Image data source not found at {}'.format(IMAGE_DSRC))
         flag = False
-    for name, path in MODEL_DICT.items():
+    for name, path in MODELS_DICT.items():
         if not os.path.isfile(path):
-            print('[INFO] Model checkpoint not found at {}'.format(path))
+            print('[INFO] {} architecture not found at {}'.format(name, path))
+            flag = False
+    for name, path in WEIGHT_DICT.items():
+        if not os.path.isfile(path):
+            print('[INFO] {} checkpoint not found at {}'.format(name, path))
             flag = False
     for directory in [OUTPUT_DIR_NOISY, OUTPUT_DIR_TOP_1, OUTPUT_DIR_TOP_N]:
         if not os.path.isdir(directory):
@@ -160,15 +168,25 @@ def load_data():
 # load models
 def load_models():
     models = {}
-    for name, path in MODEL_DICT.items():
-        if name.lower() == 'capsnet':
-            models[name] = load_model(path, custom_objects={'CapsuleLayer': CapsuleLayer,
-                                                            'Mask': Mask,
-                                                            'Length': Length})
-        elif name.lower() == 'mobilenet':
-            models[name] = load_model(path, custom_objects={'relu6': mobilenet.relu6})
+    
+    # define required custom objects
+    args_caps = {'CapsuleLayer': CapsuleLayer, 'Mask': Mask, 'Length': Length}
+    args_mobi = {'relu6': mobilenet.relu6}
+    
+    # load model architectures
+    for name, path in MODELS_DICT.items():
+        with open(path, 'r') as file:
+            model_json = file.read()
+        if name == 'capsnet':
+            models[name] = model_from_json(model_json, args_caps)
+        elif name == 'mobilenet':
+            models[name] = model_from_json(model_json, args_mobi)
         else:
-            models[name] = load_model(path)
+            models[name] = model_from_json(model_json)
+    
+    # load model weights
+    for name, path in WEIGHT_DICT.items():
+        models[name].load_weights(path)
     
     return models
 

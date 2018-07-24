@@ -80,6 +80,11 @@ else:
     aug_dir_valid = None
 
 
+# setup paths for model architecture
+mdl_dir = os.path.join(OUTPUT_DIR, 'models')
+mdl_file = os.path.join(mdl_dir, '{}.json'.format(ARCHITECTURE))
+
+
 # setup paths for callbacks
 log_dir = os.path.join(OUTPUT_DIR, 'logs')
 cpt_dir = os.path.join(OUTPUT_DIR, 'checkpoints')
@@ -98,7 +103,7 @@ def validate_paths():
         if not os.path.isdir(directory):
             print('[INFO] Data directory not found at {}'.format(directory))
             flag = False
-    output_dirs = [OUTPUT_DIR, aug_dir_train, aug_dir_valid, log_dir, cpt_dir, tbd_dir]
+    output_dirs = [OUTPUT_DIR, aug_dir_train, aug_dir_valid, mdl_dir, log_dir, cpt_dir, tbd_dir]
     output_dirs = [directory for directory in output_dirs if directory is not None]
     for directory in output_dirs:
         if not os.path.isdir(directory):
@@ -242,8 +247,8 @@ def build_model():
 def callbacks():
     cb_log = CSVLogger(filename=log_file, append=True)
     cb_stp = EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=1)
-    cb_cpt_best = ModelCheckpoint(filepath=cpt_best, monitor='val_acc', save_best_only=True, verbose=1)
-    cb_cpt_last = ModelCheckpoint(filepath=cpt_last, monitor='val_acc', save_best_only=False, verbose=0)
+    cb_cpt_best = ModelCheckpoint(filepath=cpt_best, monitor='val_acc', save_best_only=True, save_weights_only=True, verbose=1)
+    cb_cpt_last = ModelCheckpoint(filepath=cpt_last, monitor='val_acc', save_best_only=False, save_weights_only=True, verbose=0)
     cb_tbd = TensorBoard(log_dir=tbd_dir, batch_size=BATCH_SIZE, write_grads=True, write_images=True)
     cb_tel = Telegram(auth_token=AUTH_TOKEN, chat_id=TELCHAT_ID, monitor='val_acc', out_dir=OUTPUT_DIR)
     
@@ -295,6 +300,11 @@ def train():
     else:
         print('done')
         model.summary()
+    
+    # serialize model to json
+    model_json = model.to_json()
+    with open(mdl_file, 'w') as file:
+        file.write(model_json)
     
     # create callbacks
     cb_list = callbacks()
