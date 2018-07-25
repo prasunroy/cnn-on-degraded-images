@@ -207,7 +207,7 @@ def plot(train_history):
     pyplot.ylabel('loss')
     pyplot.legend()
     pyplot.savefig(os.path.join(log_dir, 'plot_loss.png'))
-    pyplot.show()
+    pyplot.show(block=False)
     
     # plot training and validation accuracy
     pyplot.figure()
@@ -218,7 +218,7 @@ def plot(train_history):
     pyplot.ylabel('accuracy')
     pyplot.legend()
     pyplot.savefig(os.path.join(log_dir, 'plot_accuracy.png'))
-    pyplot.show()
+    pyplot.show(block=False)
     
     return
 
@@ -254,8 +254,8 @@ def train():
     
     # acknowledgement
     data = {'chat_id': TELCHAT_ID,
-            'text': '`Received a new training request.\nMODEL  : {}\nDATASET: {}`'\
-            .format(ARCHITECTURE.upper(), DATASET_ID.upper()),
+            'text': '`Received a new training request.\nTASK ID: {}\nMODEL  : {}\nDATASET: {}`'\
+            .format(cb_list[-1]._task_id, ARCHITECTURE.upper(), DATASET_ID.upper()),
             'parse_mode': 'Markdown'}
     cb_list[-1]._send_message(data)
     

@@ -45,6 +45,7 @@ DATASET_ID = 'synthetic_digits'
 LABEL_MAPS = 'data/{}/labelmap.json'.format(DATASET_ID)
 IMAGE_DSRC = 'data/{}/imgs_valid/'.format(DATASET_ID)
 IMAGE_READ = 1
+
 SAVE_NOISY = False
 SAMP_NOISY = 10
 
@@ -78,6 +79,7 @@ densities = [x/100 for x in range(0, 101, 5)]
 mb_ksizes = [x for x in range(3, 32, 2)]
 gb_ksizes = [x for x in range(1, 52, 2)]
 qualities = [x for x in range(30, -1, -2)]
+
 
 # setup acknowledgement message templates
 ack_msg_beg = """`
@@ -229,7 +231,7 @@ def save_and_plot_histories(file_id, histories, title='', xlabel='', ylabel='',
             pyplot.plot(hist_dict[x], hist_dict[y], label=y.split('_')[-1])
         pyplot.legend()
         pyplot.savefig(os.path.join(output_dir, str(file_id) + '.png'))
-        pyplot.show()
+        pyplot.show(block=False)
         
         # acknowledgement
         plot_cap = '`{} [TASK ID: {}]`'.format(title, PROCESS_ID)
