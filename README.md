@@ -1,8 +1,8 @@
 # CNN on Degraded Images
-***A study on the effects of different image degradation models on deep convolutional neural network architectures.***
+***A study on the effects of different image degradation models on deep convolutional neural network architectures.*** <br />
 ***The official repository for the work on [Effects of Degradations on Deep Neural Network Architectures](https://arxiv.org/abs/1807.10108).***
 
-<img align='right' height='100' src='https://github.com/prasunroy/hello-world/blob/master/assets/logo.png' />
+<img align='right' height='80' src='https://github.com/prasunroy/hello-world/blob/master/assets/logo.png' />
 
 ![badge](https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/badge_1.svg)
 ![badge](https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/badge_2.svg)
