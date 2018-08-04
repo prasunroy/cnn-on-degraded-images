@@ -1,11 +1,22 @@
 # CNN on Degraded Images
-**A study on the effects of different image degradation models on deep convolutional neural network architectures.** <br />
-**The official repository for the work on [Effects of Degradations on Deep Neural Network Architectures](https://arxiv.org/abs/1807.10108).**
+***A study on the effects of different image degradation models on deep convolutional neural network architectures.*** <br />
+***The official repository for the work on [Effects of Degradations on Deep Neural Network Architectures](https://arxiv.org/abs/1807.10108).***
 
 <img align='right' height='80' src='https://github.com/prasunroy/hello-world/blob/master/assets/logo.png' />
 
 ![badge](https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/badge_1.svg)
 ![badge](https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/badge_2.svg)
+
+## Installation
+#### Step 1: Install [Python 3.6](https://www.python.org/downloads)
+#### Step 2: Install dependencies
+```
+pip install numpy scipy pandas matplotlib opencv-python tensorflow keras
+```
+```
+pip install git+https://github.com/prasunroy/mlutils.git
+```
+>For detailed TensorFlow installation instructions and GPU support refer to the official [TensorFlow documentation](https://www.tensorflow.org/install).
 
 ## License
 MIT License
