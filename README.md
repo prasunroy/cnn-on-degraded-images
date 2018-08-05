@@ -16,7 +16,7 @@ pip install numpy scipy pandas matplotlib opencv-python tensorflow keras
 ```
 pip install git+https://github.com/prasunroy/mlutils.git
 ```
->For detailed TensorFlow installation instructions and GPU support refer to the official [TensorFlow documentation](https://www.tensorflow.org/install).
+>Note: For detailed instructions on TensorFlow installation with GPU support refer to the official [TensorFlow documentation](https://www.tensorflow.org/install).
 
 ## License
 MIT License
