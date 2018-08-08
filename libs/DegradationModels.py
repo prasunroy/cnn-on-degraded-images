@@ -12,14 +12,12 @@ GitHub: https://github.com/prasunroy/cnn-on-degraded-images
 import cv2
 import numpy
 import random
-from scipy.stats import truncnorm
 
 
 # apply a degradation model on an image
 def imdegrade(image, model, mu=0, sigma=0, density=0, gb_ksize=(1, 1),
               mb_kernel=numpy.zeros((1, 1), dtype='uint8'), quality=100,
               seed=None):
-    
     # setup seeds for random number generators
     # (only required for reproducibility)
     numpy.random.seed(seed)
@@ -41,21 +39,21 @@ def imdegrade(image, model, mu=0, sigma=0, density=0, gb_ksize=(1, 1),
     model = model.lower()
     
     if model == 'gaussian_white' and sigma > 0:
-        image = (image / 255.0) - 0.5
-        tnorm = truncnorm((-0.5-mu)/sigma, (0.5-mu)/sigma, mu, sigma)
-        noise = tnorm.rvs((h, w))
+        image = image / 255.0
+        noise = numpy.random.normal(mu, sigma, (h, w))
         noise = numpy.dstack([noise]*c)
-        image = image + noise
-        image = cv2.normalize(image, None, 0, 255,
-                              cv2.NORM_MINMAX, cv2.CV_8UC1)
+        image += noise
+        image[image < 0] = 0.0
+        image[image > 1] = 1.0
+        image = (image * 255.0).astype('uint8')
     
     elif model == 'gaussian_color' and sigma > 0:
-        image = (image / 255.0) - 0.5
-        tnorm = truncnorm((-0.5-mu)/sigma, (0.5-mu)/sigma, mu, sigma)
-        noise = tnorm.rvs((h, w, c))
-        image = image + noise
-        image = cv2.normalize(image, None, 0, 255,
-                              cv2.NORM_MINMAX, cv2.CV_8UC1)
+        image = image / 255.0
+        noise = numpy.random.normal(mu, sigma, (h, w, c))
+        image += noise
+        image[image < 0] = 0.0
+        image[image > 1] = 1.0
+        image = (image * 255.0).astype('uint8')
     
     elif model == 'salt_and_pepper':
         if density < 0:
