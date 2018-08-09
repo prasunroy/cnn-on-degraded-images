@@ -43,16 +43,14 @@ def imdegrade(image, model, mu=0, sigma=0, density=0, gb_ksize=(1, 1),
         noise = numpy.random.normal(mu, sigma, (h, w))
         noise = numpy.dstack([noise]*c)
         image += noise
-        image[image < 0] = 0.0
-        image[image > 1] = 1.0
+        image = numpy.clip(image, 0, 1)
         image = (image * 255.0).astype('uint8')
     
     elif model == 'gaussian_color' and sigma > 0:
         image = image / 255.0
         noise = numpy.random.normal(mu, sigma, (h, w, c))
         image += noise
-        image[image < 0] = 0.0
-        image[image > 1] = 1.0
+        image = numpy.clip(image, 0, 1)
         image = (image * 255.0).astype('uint8')
     
     elif model == 'salt_and_pepper':
