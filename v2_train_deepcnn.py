@@ -13,6 +13,7 @@ from __future__ import division
 from __future__ import print_function
 
 import glob
+import json
 import numpy
 import os
 import tensorflow
@@ -54,6 +55,7 @@ FN_OPTIMIZER = optimizers.sgd(lr=0.0001, momentum=0.5)
 DATASET_ID = 'synthetic_digits'
 DATA_TRAIN = 'data/{}/imgs_train/'.format(DATASET_ID)
 DATA_VALID = 'data/{}/imgs_valid/'.format(DATASET_ID)
+LABEL_MAPS = 'data/{}/labelmap.json'.format(DATASET_ID)
 SAVE_AUGMT = False
 BATCH_SIZE = 50
 NUM_EPOCHS = 100
@@ -290,6 +292,11 @@ def train():
     
     # load data
     (data_flow_train, data_flow_valid) = load_data()
+    
+    # save labelmap
+    with open(LABEL_MAPS, 'w') as file:
+        json.dump(data_flow_train.class_indices, file)
+    print('[INFO] Created labelmap')
     
     # build model
     print('[INFO] Building model... ', end='')
