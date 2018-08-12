@@ -1,5 +1,5 @@
 # CNN on Degraded Images
-**A study on the effects of different image degradation models on deep convolutional neural network architectures.** <br />
+***A study on the effects of different image degradation models on deep convolutional neural network architectures.*** <br />
 ***The official repository for the work on [Effects of Degradations on Deep Neural Network Architectures](https://arxiv.org/abs/1807.10108).***
 
 <img align='right' height='80' src='https://github.com/prasunroy/hello-world/blob/master/assets/logo.png' />
@@ -17,6 +17,22 @@ pip install numpy scipy pandas matplotlib opencv-python tensorflow keras
 pip install git+https://github.com/prasunroy/mlutils.git
 ```
 >For detailed instructions on TensorFlow installation with GPU support refer to the official [TensorFlow documentation](https://www.tensorflow.org/install).
+
+## Dataset
+### Synthetic Digits
+This dataset contains 12,000 synthetically generated images of English digits embedded on random backgrounds. The images are generated with varying fonts, colors, scales and rotations. The backgrounds are randomly selected from a [*subset*](http://images.cocodataset.org/zips/val2017.zip) of [*COCO*](http://cocodataset.org) dataset. The dataset is available at [*Kaggle*](https://www.kaggle.com/prasunroy/synthetic-digits).
+
+Downloading through [*Kaggle API*](https://github.com/Kaggle/kaggle-api) `kaggle datasets download -d prasunroy/synthetic-digits`
+
+![image](https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/image_01.png)
+
+### Natural Images
+This dataset contains 6,899 images from 8 distinct classes compiled from various sources. The classes include airplane, car, cat, dog, flower, fruit, motorbike and person. The dataset is available at [*Kaggle*](https://www.kaggle.com/prasunroy/natural-images).
+
+Downloading through [*Kaggle API*](https://github.com/Kaggle/kaggle-api) `kaggle datasets download -d prasunroy/natural-images`
+
+![image](https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/image_02.png)
+
 
 ## License
 MIT License
