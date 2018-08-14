@@ -33,6 +33,26 @@ Downloading through [*Kaggle API*](https://github.com/Kaggle/kaggle-api) `kaggle
 
 ![image](https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/image_02.png)
 
+## Training Models
+>The *`configurations`* section of a train script defines various training parameters. These parameters can be changed by directly modifying the script before training.
+
+#### Training a deep convolutional neural network
+```
+python train_deepcnn.py
+```
+
+#### Training a capsule network
+```
+python train_capsnet.py
+```
+
+## Testing Models
+>The *`configurations`* section of a test script defines various testing parameters. These parameters can be changed by directly modifying the script before testing.
+
+```
+python test.py
+```
+
 
 ## License
 MIT License
