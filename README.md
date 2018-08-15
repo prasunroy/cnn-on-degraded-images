@@ -48,11 +48,19 @@ python train_capsnet.py
 
 ## Testing Models
 >The *`configurations`* section of a test script defines various testing parameters. These parameters can be changed by directly modifying the script before testing.
-
 ```
 python test.py
 ```
 
+## Citation
+```
+@article{roy2018effects,
+  title={Effects of Degradations on Deep Neural Network Architectures},
+  author={Roy, Prasun and Ghosh, Subhankar and Bhattacharya, Saumik and Pal, Umapada},
+  journal={arXiv preprint arXiv:1807.10108},
+  year={2018}
+}
+```
 
 ## License
 MIT License
