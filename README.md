@@ -62,6 +62,14 @@ python test.py
 }
 ```
 
+## Acknowledgements
+This research is suppoted by [Indian Statistical Institute](https://www.isical.ac.in/) and [NVIDIA GPU Grant Program](https://developer.nvidia.com/academic_gpu_seeding).
+<p align='center'>
+  <img height='120' src='https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/image_03.png' />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img height='120' src='https://github.com/prasunroy/cnn-on-degraded-images/blob/master/assets/image_04.png' />
+</p>
+
 ## License
 MIT License
 
