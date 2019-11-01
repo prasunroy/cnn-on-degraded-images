@@ -1,6 +1,6 @@
 # CNN on Degraded Images
 ***A study on the effects of different image degradation models on deep convolutional neural network architectures.*** <br />
-***The official repository for the work on [Effects of Degradations on Deep Neural Network Architectures](https://arxiv.org/abs/1807.10108).***
+***The official GitHub repository for the paper on [Effects of Degradations on Deep Neural Network Architectures](https://arxiv.org/abs/1807.10108).***
 
 <img align='right' height='80' src='https://github.com/prasunroy/hello-world/blob/master/assets/logo.png' />
 
@@ -55,10 +55,10 @@ python test.py
 ## Citation
 ```
 @article{roy2018effects,
-  title={Effects of Degradations on Deep Neural Network Architectures},
-  author={Roy, Prasun and Ghosh, Subhankar and Bhattacharya, Saumik and Pal, Umapada},
-  journal={arXiv preprint arXiv:1807.10108},
-  year={2018}
+  title   = {Effects of Degradations on Deep Neural Network Architectures},
+  author  = {Roy, Prasun and Ghosh, Subhankar and Bhattacharya, Saumik and Pal, Umapada},
+  journal = {arXiv preprint arXiv:1807.10108},
+  year    = {2018}
 }
 ```
 
@@ -83,5 +83,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <br />
 <br />
+
+
 
 **Made with** :heart: **and GitHub**
